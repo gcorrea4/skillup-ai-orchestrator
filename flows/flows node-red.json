@@ -1,0 +1,502 @@
+[
+    {
+        "id": "85d56ccb12d9b197",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "031f684558bb3615",
+        "type": "function",
+        "z": "85d56ccb12d9b197",
+        "name": "function 8",
+        "func": "\nif (msg.payload.candidates && msg.payload.candidates.length > 0) {\n\n    var textoGemini = msg.payload.candidates[0].content.parts[0].text;\n\n  \n    msg.payload = String(textoGemini);\n\n    return msg;\n\n} else {\n    \n    msg.payload = \"Ocorreu um erro ao gerar a trilha.\";\n    return msg;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1260,
+        "y": 1140,
+        "wires": [
+            [
+                "4923bfa469ed6aea"
+            ]
+        ]
+    },
+    {
+        "id": "7b0ea2e119d42948",
+        "type": "http request",
+        "z": "85d56ccb12d9b197",
+        "name": "Gemini API",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=SUA_CHAVE_AQUI",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1110,
+        "y": 1180,
+        "wires": [
+            [
+                "031f684558bb3615"
+            ]
+        ]
+    },
+    {
+        "id": "71dc4a05041aa92d",
+        "type": "http request",
+        "z": "85d56ccb12d9b197",
+        "name": "Modelos de API gemini",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models?key=KEY_GOOGLE_GEMINI",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 2060,
+        "y": 640,
+        "wires": [
+            [
+                "bb7e665a12405d45"
+            ]
+        ]
+    },
+    {
+        "id": "0e2e8ff9c745847a",
+        "type": "inject",
+        "z": "85d56ccb12d9b197",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1820,
+        "y": 700,
+        "wires": [
+            [
+                "71dc4a05041aa92d"
+            ]
+        ]
+    },
+    {
+        "id": "bb7e665a12405d45",
+        "type": "debug",
+        "z": "85d56ccb12d9b197",
+        "name": "debug 17",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2240,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "b0b917b435473e06",
+        "type": "telegram receiver",
+        "z": "85d56ccb12d9b197",
+        "name": "",
+        "bot": "0153de809e9e3c56",
+        "saveDataDir": "",
+        "filterCommands": false,
+        "x": 330,
+        "y": 1000,
+        "wires": [
+            [
+                "16b6193b2968d30b",
+                "406c53596ac15f95"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "16b6193b2968d30b",
+        "type": "function",
+        "z": "85d56ccb12d9b197",
+        "name": "function 9",
+        "func": "\nif (msg.payload.chatId) {\n    flow.set(\"chatId\", msg.payload.chatId);\n}\n\nif (msg.payload.type === 'voice') {\n    flow.set(\"tipoEntrada\", \"voz\"); \n    \n    \n    msg.url = msg.payload.weblink;\n    \n    \n    msg.params = {\n        'content_type': 'audio/ogg; codecs=opus'\n    };\n    \n    return [msg, null]; \n}\n\n\nif (msg.payload.content) {\n    flow.set(\"tipoEntrada\", \"texto\");\n    msg.payload = msg.payload.content;\n    return [null, msg]; \n}\n\nreturn null;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 1040,
+        "wires": [
+            [
+                "71409300c50dd303",
+                "f5082cc4e2933640"
+            ],
+            [
+                "3d1624a27f6e961b"
+            ]
+        ]
+    },
+    {
+        "id": "c21cd5b5a647622f",
+        "type": "watson-text-to-speech",
+        "z": "85d56ccb12d9b197",
+        "name": "",
+        "lang": "pt-BR",
+        "langhidden": "pt-BR",
+        "langcustom": "NoCustomisationSetting",
+        "langcustomhidden": "",
+        "voice": "pt-BR_LucasExpressive",
+        "voicehidden": "pt-BR_LucasExpressive",
+        "format": "audio/ogg; codecs=opus",
+        "password": "",
+        "apikey": "SUA_API_KEY_AQUI",
+        "payload-response": true,
+        "service-endpoint": "https://api.us-south.text-to-speech.watson.cloud.ibm.com/instances/bf65728f-c85d-4c98-a64f-59f2e5207c15",
+        "x": 1560,
+        "y": 1160,
+        "wires": [
+            [
+                "ce2c78ec68f66aa3",
+                "def3ee466c13d7e9",
+                "ef7fba8414522ab8"
+            ]
+        ]
+    },
+    {
+        "id": "ce2c78ec68f66aa3",
+        "type": "play audio",
+        "z": "85d56ccb12d9b197",
+        "name": "",
+        "voice": "0",
+        "x": 1730,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "31de73a33bbaed22",
+        "type": "watson-speech-to-text",
+        "z": "85d56ccb12d9b197",
+        "name": "",
+        "alternatives": 1,
+        "speakerlabels": true,
+        "smartformatting": false,
+        "lang": "pt-BR",
+        "langhidden": "pt-BR",
+        "langcustom": "NoCustomisationSetting",
+        "langcustomhidden": "",
+        "custom-weight": "0.5",
+        "band": "BroadbandModel",
+        "bandhidden": "",
+        "keywords": "",
+        "keywords-threshold": "0.5",
+        "word-confidence": false,
+        "password": "",
+        "apikey": "SUA_API_KEY_AQUI",
+        "payload-response": true,
+        "streaming-mode": false,
+        "streaming-mute": true,
+        "auto-connect": false,
+        "discard-listening": false,
+        "disable-precheck": false,
+        "service-endpoint": "https://api.us-south.speech-to-text.watson.cloud.ibm.com/instances/fd41c236-f83d-4abd-9b35-d36d73a9cffa",
+        "x": 940,
+        "y": 960,
+        "wires": [
+            [
+                "3d1624a27f6e961b",
+                "21c90ad2204f213f"
+            ]
+        ]
+    },
+    {
+        "id": "519039e279a50ae2",
+        "type": "telegram sender",
+        "z": "85d56ccb12d9b197",
+        "name": "",
+        "bot": "0153de809e9e3c56",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1950,
+        "y": 1340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "71409300c50dd303",
+        "type": "debug",
+        "z": "85d56ccb12d9b197",
+        "name": "debug 19",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "def3ee466c13d7e9",
+        "type": "debug",
+        "z": "85d56ccb12d9b197",
+        "name": "debug 20",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1720,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "ef7fba8414522ab8",
+        "type": "function",
+        "z": "85d56ccb12d9b197",
+        "name": "function 10",
+        "func": "\nmsg.payload = {\n    chatId: msg.chatId, \n    type: 'voice',\n    content: msg.payload \n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1890,
+        "y": 1180,
+        "wires": [
+            [
+                "6dac3a9ad82037ff",
+                "519039e279a50ae2"
+            ]
+        ]
+    },
+    {
+        "id": "6dac3a9ad82037ff",
+        "type": "debug",
+        "z": "85d56ccb12d9b197",
+        "name": "debug 21",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2040,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "ecd0f1dbc2d5f7d7",
+        "type": "function",
+        "z": "85d56ccb12d9b197",
+        "name": "function 11",
+        "func": "\ndelete msg.params;\ndelete msg.voice;\ndelete msg.responseUrl;\n\nvar intentGemini = 'pedir_trilha';\nvar irParaGemini = false;\nvar esperandoTema = flow.get(\"esperandoTema\") || false;\n\n\nvar textoAtual = \"\";\n\n\nif (msg.payload.input && msg.payload.input.text) {\n    textoAtual = msg.payload.input.text;\n}\nelse if (typeof msg.payload === 'string') {\n    textoAtual = msg.payload;\n}\nelse if (msg.originalMessage && msg.originalMessage.text) {\n    textoAtual = msg.originalMessage.text; \n}\n\n\nif (!textoAtual || textoAtual === \"Texto vazio\") {\n    textoAtual = \"Geral\";\n}\n\n\nif (msg.payload.output && msg.payload.output.intents && msg.payload.output.intents.length > 0) {\n    if (msg.payload.output.intents[0].intent === intentGemini) {\n        irParaGemini = true;\n    }\n}\n\n\n\n\nif (irParaGemini) {\n    flow.set(\"esperandoTema\", true);\n\n    var prompt = `Atue como um Mentor FIAP. O usuário disse: \"${textoAtual}\".\n    Se ele já disse o tema específico, crie a trilha. Se não, pergunte qual a área (ex: TI, Design).\n    Seja curto.`;\n\n    msg.payload = { contents: [{ parts: [{ text: prompt }] }] };\n    return [msg, null];\n}\n\n\nelse if (esperandoTema === true) {\n    flow.set(\"esperandoTema\", false);\n\n    \n    var prompt = `Atue como um Mentor Sênior da FIAP.\n    \n    CONTEXTO: O usuário quer estudar: \"${textoAtual}\".\n    \n    MISSÃO: Crie uma micro-trilha de estudos.\n    \n    REGRAS OBRIGATÓRIAS DE FORMATAÇÃO:\n    1. NÃO dê introduções longas, nem \"parabéns\", nem \"olá\". Vá direto ao ponto.\n    2. Gere APENAS uma lista numerada com 3 a 5 passos essenciais.\n    3. Use Emojis no início de cada passo.\n    4. Seja extremamente conciso (máximo de 1 frase por passo).\n    5. No final, coloque uma frase curta de motivação.\n    \n    Exemplo de como eu quero a resposta:\n    🎯 *Trilha de Python:*\n    1️⃣ Lógica de Programação e Variáveis\n    2️⃣ Estruturas de Dados e Loops\n    3️⃣ Orientação a Objetos\n    🚀 Bons estudos!`;\n\n    msg.payload = { contents: [{ parts: [{ text: prompt }] }] };\n    return [msg, null];\n}\n\n\nelse {\n    var textoParaFalar = \"Não entendi.\";\n    try {\n        if (msg.payload.output.generic && msg.payload.output.generic.length > 0) {\n            textoParaFalar = msg.payload.output.generic[0].text || \"Resposta sem texto.\";\n        }\n    } catch (e) { }\n\n    msg.payload = String(textoParaFalar);\n    return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 930,
+        "y": 1220,
+        "wires": [
+            [
+                "7b0ea2e119d42948"
+            ],
+            [
+                "4923bfa469ed6aea"
+            ]
+        ]
+    },
+    {
+        "id": "c6a07e12e5ec8126",
+        "type": "debug",
+        "z": "85d56ccb12d9b197",
+        "name": "debug 22",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1280,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "406c53596ac15f95",
+        "type": "debug",
+        "z": "85d56ccb12d9b197",
+        "name": "debug 23",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "3d1624a27f6e961b",
+        "type": "watson-assistant-v2",
+        "z": "85d56ccb12d9b197",
+        "name": "AssistenteAvaliador",
+        "service-endpoint": "https://api.au-syd.assistant.watson.cloud.ibm.com/instances/f176baf1-8816-44a1-b479-6d42efd6f87c",
+        "assistant_id": "34ee6b12-2be7-4567-82c5-ca3e41693fe1",
+        "debug": false,
+        "restart": false,
+        "return_context": true,
+        "alternate_intents": false,
+        "multisession": false,
+        "timeout": "",
+        "optout-learning": false,
+        "persist-session-id": false,
+        "x": 1030,
+        "y": 1080,
+        "wires": [
+            [
+                "ecd0f1dbc2d5f7d7",
+                "c6a07e12e5ec8126"
+            ]
+        ]
+    },
+    {
+        "id": "4923bfa469ed6aea",
+        "type": "function",
+        "z": "85d56ccb12d9b197",
+        "name": "Decisor de saida",
+        "func": "\nvar tipo = flow.get(\"tipoEntrada\");\nvar id = flow.get(\"chatId\");\n\n\nif (tipo === \"texto\") {\n    msg.payload = {\n        chatId: id,\n        type: 'message',\n        content: msg.payload \n    };\n    return [msg, null];\n}\n\n\nif (tipo === \"voz\") {\n    return [null, msg];\n}\n\nreturn null;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1410,
+        "y": 1260,
+        "wires": [
+            [
+                "519039e279a50ae2"
+            ],
+            [
+                "c21cd5b5a647622f"
+            ]
+        ]
+    },
+    {
+        "id": "21c90ad2204f213f",
+        "type": "debug",
+        "z": "85d56ccb12d9b197",
+        "name": "debug 13",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1140,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "f5082cc4e2933640",
+        "type": "http request",
+        "z": "85d56ccb12d9b197",
+        "name": "Baixar audio",
+        "method": "GET",
+        "ret": "bin",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 750,
+        "y": 1020,
+        "wires": [
+            [
+                "31de73a33bbaed22"
+            ]
+        ]
+    },
+    {
+        "id": "0153de809e9e3c56",
+        "type": "telegram bot",
+        "botname": "AssistenteAvaliador",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "pollinterval": 300,
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": 6667,
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbothost": "0.0.0.0",
+        "localbotport": 8443,
+        "publicbotport": 8443,
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    },
+    {
+        "id": "7b0ef9ad21f2b3a5",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-telegrambot": "16.3.3",
+            "node-red-node-watson": "0.10.3",
+            "node-red-contrib-play-audio": "2.5.0"
+        }
+    }
+]
+

@@ -1,0 +1,402 @@
+{
+  "intents": [
+    {
+      "intent": "ajuda",
+      "examples": [
+        {
+          "text": "Estou perdido"
+        },
+        {
+          "text": "O que posso perguntar?"
+        }
+      ],
+      "description": ""
+    },
+    {
+      "intent": "despedida",
+      "examples": [
+        {
+          "text": "Até mais"
+        },
+        {
+          "text": "Falou"
+        },
+        {
+          "text": "Tchau"
+        }
+      ],
+      "description": ""
+    },
+    {
+      "intent": "pedir_trilha",
+      "examples": [
+        {
+          "text": "Aprender algo novo"
+        },
+        {
+          "text": "Criar plano"
+        },
+        {
+          "text": "Criar uma trilha"
+        },
+        {
+          "text": "eu quero estudar"
+        },
+        {
+          "text": "gostaria de estudar"
+        },
+        {
+          "text": "Me ajuda a estudar"
+        },
+        {
+          "text": "O que eu devo estudar?"
+        },
+        {
+          "text": "Quero aprender"
+        },
+        {
+          "text": "quero estuda"
+        },
+        {
+          "text": "Quero estudar"
+        },
+        {
+          "text": "Quero estudar."
+        },
+        {
+          "text": "Quero uma trilha"
+        },
+        {
+          "text": "quero uma trilha."
+        },
+        {
+          "text": "Upskilling"
+        }
+      ],
+      "description": ""
+    },
+    {
+      "intent": "saudacao",
+      "examples": [
+        {
+          "text": "Começar"
+        },
+        {
+          "text": "Eae"
+        },
+        {
+          "text": "Oi"
+        },
+        {
+          "text": "Olá"
+        }
+      ],
+      "description": ""
+    },
+    {
+      "intent": "sobre_bot",
+      "examples": [
+        {
+          "text": "O que você faz?"
+        },
+        {
+          "text": "Quem é você?"
+        }
+      ],
+      "description": ""
+    }
+  ],
+  "entities": [
+    {
+      "entity": "confirmacao",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "nao",
+          "synonyms": [
+            "jamais",
+            "negativo",
+            "nem ideia",
+            "nope",
+            "nunca"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "sim",
+          "synonyms": [
+            "aham",
+            "claro",
+            "com certeza",
+            "manjo",
+            "positivo",
+            "sei"
+          ]
+        }
+      ],
+      "fuzzy_match": false
+    },
+    {
+      "entity": "formato",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "Artigo",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "Curso",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "Podcast",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "Video",
+          "synonyms": []
+        }
+      ],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "nivel",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "avancado",
+          "synonyms": [
+            "alto",
+            "difícil",
+            "domino",
+            "expert",
+            "sei tudo",
+            "sênior"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "iniciante",
+          "synonyms": [
+            "basico",
+            "começando",
+            "nada",
+            "noob",
+            "novato",
+            "sou novo",
+            "zero"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "intermediario",
+          "synonyms": [
+            "arranho",
+            "mais ou menos",
+            "mediano",
+            "médio",
+            "tenho uma noção"
+          ]
+        }
+      ],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "rm",
+      "values": [
+        {
+          "type": "patterns",
+          "value": "rm",
+          "patterns": [
+            "^RM\\d{5}$"
+          ]
+        }
+      ],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "tema",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "Front-End",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "IA",
+          "synonyms": [
+            "I.A",
+            "Inteligencia artificial"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "Java",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "Liderança",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "Python",
+          "synonyms": [
+            "Py"
+          ]
+        },
+        {
+          "type": "synonyms",
+          "value": "Soft Skills",
+          "synonyms": []
+        }
+      ],
+      "fuzzy_match": true
+    }
+  ],
+  "metadata": {
+    "api_version": {
+      "major_version": "v2",
+      "minor_version": "2018-11-08"
+    }
+  },
+  "dialog_nodes": [
+    {
+      "type": "standard",
+      "title": "Bem-vindo",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Olá. Como posso te ajudar?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "conditions": "welcome",
+      "dialog_node": "Bem-vindo"
+    },
+    {
+      "type": "standard",
+      "title": "Em outros casos",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Eu não entendi. Você pode tentar reformular a frase."
+              },
+              {
+                "text": "Você pode reformular sua afirmação? Eu não estou entendendo."
+              },
+              {
+                "text": "Eu não entendi o sentido."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "conditions": "anything_else",
+      "dialog_node": "Em outros casos",
+      "previous_sibling": "node_8_1763544015239",
+      "disambiguation_opt_out": true
+    },
+    {
+      "type": "standard",
+      "title": "Guardar SQL",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Perfeito! Coletei suas informações. Aguarde um instante enquanto gero sua trilha..."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_6_1763544097044",
+      "context": {
+        "sabe_sql": "@confirmacao"
+      },
+      "conditions": "@confirmacao",
+      "dialog_node": "node_4_1763544169533"
+    },
+    {
+      "type": "standard",
+      "title": "Guardar Nível",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Entendido. E sobre Banco de Dados, você já sabe fazer consultas SQL? (Sim ou Não)"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_8_1763544015239",
+      "context": {
+        "nivel_logica": "@nivel"
+      },
+      "conditions": "@nivel",
+      "dialog_node": "node_6_1763544097044"
+    },
+    {
+      "type": "standard",
+      "title": "Iniciar Trilha",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Entendi! Estou gerando sua trilha personalizada.."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "conditions": "#pedir_trilha",
+      "dialog_node": "node_8_1763544015239",
+      "previous_sibling": "Bem-vindo"
+    }
+  ],
+  "counterexamples": [],
+  "system_settings": {
+    "disambiguation": {
+      "prompt": "Você quis dizer:",
+      "enabled": true,
+      "randomize": true,
+      "max_suggestions": 5,
+      "suggestion_text_policy": "title",
+      "none_of_the_above_prompt": "Nenhuma das anteriores",
+      "use_connect_to_support_prompt": "Connect to support",
+      "single_answer_clarification_prompt": "Something else"
+    },
+    "human_agent_assist": {
+      "prompt": "Você quis dizer:"
+    }
+  },
+  "learning_opt_out": false,
+  "language": "pt-br",
+  "description": "",
+  "name": "CR7-dialog"
+}
