@@ -14,18 +14,14 @@
 <a name="english"></a>
 ## English
 
-
-
 ### Project Overview
 SkillUp is a hybrid AI assistant designed to generate personalized learning paths. It acts as an educational mentor that maps the user's current knowledge and suggests a logical roadmap to master new skills in IT, Design, or Business.
-
 
 ### 🛠 Technologies & Skills
 * **AI & NLP:** Google Gemini API, IBM Watson Assistant.
 * **Backend & Integration:** Node-RED (Low-code orchestration), API REST integration.
 * **Interface & Voice:** Telegram Bot API, STT (Speech-to-Text), TTS (Text-to-Speech).
 * **Data Handling:** JSON, Environment Variables, Logic Flows.
-
 
 <div align="center">
   <img src="img/print-chat-1.png" alt="Telegram Bot Preview" width="400">
@@ -109,7 +105,7 @@ Para rodar este projeto na sua máquina, você vai precisar de:
 
 ---
 
-**Developed by Gabriel Correa Souza** *Project created for AI & Chatbot discipline at FIAP.*
+**Developed by Gabriel Correa Souza** 
 
 ---
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/gabriel-correa-souza-763135271/)
